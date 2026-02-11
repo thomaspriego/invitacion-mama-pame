@@ -5,603 +5,223 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Mama Pame 💘</title>
 
-<!-- Fuente bonita -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap" rel="stylesheet">
 
 <style>
-  :root{
-    --pink:#ff2f63;
-    --bg1:#ffd6e0;
-    --bg2:#ff9fb2;
-    --card: rgba(255,255,255,.78);
-    --card2: rgba(255,255,255,.90);
-    --text:#1f1f1f;
-    --line: rgba(0,0,0,.30);
-    --glow: rgba(255,47,99,.75);
-    --glow2: rgba(255,159,28,.70);
-  }
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:"Poppins",sans-serif;
+  overflow:hidden;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#ffd6e0,#ff9fb2);
+  color:#222;
+}
 
-  *{box-sizing:border-box}
+/* INTRO */
+#intro{
+  position:fixed; inset:0;
+  background:rgba(0,0,0,.45);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:10;
+}
+.card{
+  background:rgba(255,255,255,.9);
+  padding:25px;
+  border-radius:25px;
+  text-align:center;
+  width:min(500px,90vw);
+  box-shadow:0 25px 80px rgba(0,0,0,.3);
+}
+button{
+  padding:12px 18px;
+  border:none;
+  border-radius:30px;
+  font-weight:800;
+  cursor:pointer;
+  margin-top:15px;
+}
+#startBtn{background:#111;color:#fff}
 
-  body{
-    margin:0;
-    font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    overflow:hidden;
-    height:100vh;
-    color:var(--text);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:18px;
+/* ESCENA */
+#scene{
+  width:min(800px,92vw);
+  height:350px;
+  position:relative;
+  display:none;
+}
+.point{
+  position:absolute;
+  font-weight:800;
+}
+#chile{left:10%;top:70%}
+#ecuador{right:10%;top:35%}
 
-    /* fondo más pro */
-    background:
-      radial-gradient(900px 600px at 20% 15%, rgba(255,255,255,.60), transparent 60%),
-      radial-gradient(900px 600px at 80% 90%, rgba(255,255,255,.35), transparent 62%),
-      linear-gradient(135deg,var(--bg1),var(--bg2));
-  }
+#plane{
+  position:absolute;
+  left:10%;
+  top:70%;
+  transform:translate(-50%,-50%);
+}
+#plane img{
+  width:70px;
+  height:auto;
+}
 
-  /* “blobs” suaves */
-  body::before, body::after{
-    content:"";
-    position:fixed;
-    width:520px;
-    height:520px;
-    border-radius:50%;
-    filter: blur(48px);
-    opacity:.45;
-    z-index:-1;
-    pointer-events:none;
-  }
-  body::before{
-    left:-160px;
-    top:-140px;
-    background: radial-gradient(circle at 30% 30%, rgba(255,47,99,.55), transparent 60%);
-  }
-  body::after{
-    right:-200px;
-    bottom:-200px;
-    background: radial-gradient(circle at 30% 30%, rgba(255,159,28,.55), transparent 60%);
-  }
+/* FOTO MOMENTO EMOCIONAL */
+#photoMoment{
+  position:fixed;
+  inset:0;
+  display:none;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  background:rgba(0,0,0,.6);
+  z-index:15;
+  text-align:center;
+  animation:fadeIn .8s ease forwards;
+}
+#photoMoment img{
+  width:min(500px,85vw);
+  border-radius:20px;
+  box-shadow:0 25px 60px rgba(0,0,0,.5);
+}
+#photoMoment p{
+  color:white;
+  margin-top:20px;
+  font-size:20px;
+  font-weight:600;
+}
+@keyframes fadeIn{
+  from{opacity:0}
+  to{opacity:1}
+}
 
-  /* ========= INTRO (Premium card) ========= */
-  #intro{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.40);
-    backdrop-filter: blur(8px);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    z-index:20;
-    padding:18px;
-  }
+/* INVITACION */
+#cardFinal{
+  display:none;
+  background:rgba(255,255,255,.95);
+  padding:25px;
+  border-radius:25px;
+  text-align:center;
+  width:min(450px,90vw);
+  box-shadow:0 25px 80px rgba(0,0,0,.25);
+}
+.yes{background:#ff2f63;color:white}
+.no{background:#eee}
 
-  .introCard{
-    width:min(560px, 100%);
-    background: var(--card);
-    border:1px solid rgba(255,255,255,.6);
-    border-radius:26px;
-    padding:22px 20px;
-    text-align:center;
-    box-shadow: 0 26px 90px rgba(0,0,0,.24);
-    backdrop-filter: blur(14px);
-    position:relative;
-    overflow:hidden;
-  }
-  .introCard::before{
-    content:"";
-    position:absolute;
-    inset:-1px;
-    background: radial-gradient(700px 260px at 20% 0%, rgba(255,47,99,.25), transparent 60%),
-                radial-gradient(700px 260px at 80% 100%, rgba(255,159,28,.18), transparent 55%);
-    pointer-events:none;
-  }
-  .introCard > *{ position:relative; }
-
-  .introCard h2{
-    margin:0 0 8px;
-    font-size: 22px;
-    font-weight:900;
-    letter-spacing:-.2px;
-  }
-  .introCard p{
-    margin:0;
-    opacity:.86;
-    line-height:1.35;
-    font-weight:600;
-  }
-  .introHint{
-    margin-top:10px;
-    font-size:13px;
-    opacity:.78;
-    font-weight:600;
-  }
-
-  button{
-    padding:12px 18px;
-    border:none;
-    border-radius:999px;
-    font-weight:900;
-    cursor:pointer;
-    margin-top:14px;
-    transition: transform .12s ease, opacity .12s ease, box-shadow .12s ease;
-    user-select:none;
-  }
-  button:active{ transform: translateY(1px) scale(.99); }
-
-  #startBtn{
-    background:#111;
-    color:white;
-    opacity:.96;
-    box-shadow: 0 16px 35px rgba(0,0,0,.22);
-  }
-  #startBtn:hover{ opacity:1; transform: translateY(-1px); }
-
-  /* ========= ESCENA ========= */
-  #scene{
-    width:min(860px, 92vw);
-    height:min(380px, 50vh);
-    position:relative;
-    display:none;
-    border-radius:26px;
-    background: rgba(255,255,255,.28);
-    border:1px solid rgba(255,255,255,.55);
-    box-shadow:0 22px 80px rgba(0,0,0,.16);
-    overflow:hidden;
-    backdrop-filter: blur(14px);
-  }
-  .sceneTitle{
-    position:absolute;
-    top:12px; left:14px;
-    padding:8px 12px;
-    border-radius:999px;
-    background:rgba(255,255,255,.78);
-    border:1px solid rgba(0,0,0,.06);
-    font-weight:900;
-    font-size:13px;
-    box-shadow: 0 10px 26px rgba(0,0,0,.10);
-  }
-
-  .point{
-    position:absolute;
-    display:flex;
-    align-items:center;
-    gap:8px;
-    font-weight:900;
-    font-size:14px;
-    padding:10px 12px;
-    border-radius:999px;
-    background:rgba(255,255,255,.85);
-    border:1px solid rgba(0,0,0,.06);
-    box-shadow:0 10px 24px rgba(0,0,0,.10);
-    transform: translate(-50%, -50%);
-    white-space:nowrap;
-  }
-  #chile{ left:16%; top:72%; }
-  #ecuador{ left:84%; top:38%; }
-
-  /* SVG line + glow */
-  #routeSvg{
-    position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
-    pointer-events:none;
-  }
-  #routePath{
-    fill:none;
-    stroke: var(--line);
-    stroke-width: 3;
-    stroke-linecap: round;
-    stroke-dasharray: 7 10;
-    filter: drop-shadow(0 10px 14px rgba(0,0,0,.08));
-  }
-
-  /* Glow path (brillito que corre) */
-  #glowPath{
-    fill:none;
-    stroke: url(#glowGrad);
-    stroke-width: 6;
-    stroke-linecap: round;
-    stroke-dasharray: 60 260;
-    opacity: 0;
-    filter: drop-shadow(0 12px 18px rgba(255,47,99,.20));
-  }
-  .glowOn{
-    opacity: .95;
-    animation: dashMove 1.25s linear infinite;
-  }
-  @keyframes dashMove{
-    to{ stroke-dashoffset: -320; }
-  }
-
-  /* ========= “Mandarina con alas” ========= */
-  #plane{
-    position:absolute;
-    left:16%;
-    top:72%;
-    z-index:2;
-    will-change: transform, left, top;
-    transform: translate(-50%, -50%) rotate(0deg);
-    filter: drop-shadow(0 16px 18px rgba(0,0,0,.18));
-  }
-  #plane .inner{
-    position:relative;
-    font-size:34px; /* tamaño principal */
-    animation: bob 0.55s ease-in-out infinite;
-    transform-origin:center;
-  }
-  /* alas usando “✈️” a los lados */
-  #plane .inner::before,
-  #plane .inner::after{
-    content:"✈️";
-    position:absolute;
-    top:50%;
-    transform: translateY(-50%) scale(.65);
-    opacity:.88;
-    filter: drop-shadow(0 10px 12px rgba(0,0,0,.10));
-  }
-  #plane .inner::before{
-    left:-26px;
-    transform: translateY(-50%) scale(.62) rotate(-18deg);
-  }
-  #plane .inner::after{
-    right:-26px;
-    transform: translateY(-50%) scale(.62) rotate(18deg);
-  }
-
-  @keyframes bob{
-    0%,100%{ transform: translateY(0); }
-    50%{ transform: translateY(-5px); }
-  }
-
-  /* ========= INVITACIÓN (Premium card) ========= */
-  #card{
-    display:none;
-    width:min(560px, 92vw);
-    background: var(--card);
-    padding:26px 22px;
-    border-radius:26px;
-    text-align:center;
-    box-shadow: 0 26px 90px rgba(0,0,0,.18);
-    border:1px solid rgba(255,255,255,.65);
-    backdrop-filter: blur(14px);
-    position:relative;
-    overflow:hidden;
-  }
-  #card::before{
-    content:"";
-    position:absolute;
-    inset:-1px;
-    background: radial-gradient(650px 240px at 20% 0%, rgba(255,47,99,.22), transparent 60%),
-                radial-gradient(650px 240px at 80% 100%, rgba(255,159,28,.16), transparent 55%);
-    pointer-events:none;
-  }
-  #card > *{ position:relative; }
-
-  #card h2{
-    margin:0 0 8px;
-    font-size:26px;
-    font-weight:900;
-    letter-spacing:-.3px;
-  }
-  #card p{
-    margin:6px 0;
-    opacity:.90;
-    line-height:1.35;
-    font-weight:600;
-  }
-
-  .badge{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    margin-top:10px;
-    padding:10px 12px;
-    border-radius:999px;
-    background: rgba(255,255,255,.78);
-    border:1px solid rgba(0,0,0,.06);
-    font-weight:900;
-    box-shadow:0 12px 28px rgba(0,0,0,.10);
-  }
-
-  .yes{
-    background: var(--pink);
-    color:white;
-    box-shadow: 0 16px 34px rgba(255,47,99,.30);
-  }
-  .yes:hover{ transform: translateY(-1px); }
-  .no{
-    background: rgba(255,255,255,.86);
-    border:1px solid rgba(0,0,0,.10);
-  }
-
-  /* Flotantes */
-  .float{
-    position:absolute;
-    pointer-events:none;
-    animation: floatUp linear forwards;
-    filter: drop-shadow(0 12px 14px rgba(0,0,0,.10));
-  }
-  @keyframes floatUp{
-    from{ transform: translateY(10vh) rotate(-10deg); opacity:0; }
-    10%{ opacity:.95; }
-    to{ transform: translateY(-130vh) rotate(12deg); opacity:0; }
-  }
-
-  /* ========= FINAL ========= */
-  #overlay{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.5);
-    display:none;
-    justify-content:center;
-    align-items:center;
-    z-index:30;
-    padding:18px;
-    backdrop-filter: blur(6px);
-  }
-  .modal{
-    width:min(600px, 92vw);
-    background: var(--card2);
-    padding:22px 18px;
-    border-radius:26px;
-    text-align:center;
-    box-shadow:0 28px 100px rgba(0,0,0,.28);
-    border:1px solid rgba(0,0,0,.06);
-  }
-  .modal h2{ margin:0 0 8px; font-size:24px; font-weight:900; }
-  .modal p{ margin:0; font-weight:600; opacity:.9; }
-
-  .pd{
-    margin-top:12px;
-    padding:12px 14px;
-    border-radius:18px;
-    background:#fff6e8;
-    border:1px solid rgba(255,159,28,.30);
-    font-weight:900;
-    line-height:1.35;
-  }
+/* FINAL */
+#overlay{
+  position:fixed; inset:0;
+  background:rgba(0,0,0,.5);
+  display:none;
+  justify-content:center;
+  align-items:center;
+}
+.modal{
+  background:white;
+  padding:25px;
+  border-radius:20px;
+  text-align:center;
+  width:min(450px,90vw);
+}
 </style>
 </head>
-
 <body>
 
 <!-- INTRO -->
 <div id="intro">
-  <div class="introCard">
+  <div class="card">
     <h2>🍊 Atención Mama Pame 🍊</h2>
-    <p>Una invitación está por despegar desde <b>Chile</b> hasta <b>Ecuador</b>…</p>
-    <div class="introHint">Toca “Iniciar” para que suene la música (reglas del celular 😅)</div>
+    <p>Una invitación está viajando desde Chile hasta Ecuador...</p>
     <button id="startBtn">Iniciar 💘</button>
   </div>
 </div>
 
-<!-- ESCENA (Chile -> Ecuador) -->
-<div id="scene" aria-label="Vuelo Chile Ecuador">
-  <div class="sceneTitle">Ruta ultra secreta 🤫</div>
-
-  <svg id="routeSvg" viewBox="0 0 1000 500" preserveAspectRatio="none">
-    <defs>
-      <linearGradient id="glowGrad" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%"  stop-color="rgba(255,47,99,0)"/>
-        <stop offset="35%" stop-color="rgba(255,47,99,.85)"/>
-        <stop offset="65%" stop-color="rgba(255,159,28,.75)"/>
-        <stop offset="100%" stop-color="rgba(255,159,28,0)"/>
-      </linearGradient>
-    </defs>
-
-    <path id="routePath" d="" />
-    <path id="glowPath" d="" />
-  </svg>
-
+<!-- ESCENA -->
+<div id="scene">
   <div id="chile" class="point">🇨🇱 Chile</div>
   <div id="ecuador" class="point">🇪🇨 Ecuador</div>
-
-  <div id="plane" title="Mandarina-Avión">
-    <div class="inner">🍊</div>
+  <div id="plane">
+    <img src="plane.png" alt="Mandarina avión">
   </div>
 </div>
 
-<!-- INVITACIÓN -->
-<div id="card">
-  <h2>Mama Pame 💖</h2>
+<!-- FOTO EMOCIONAL -->
+<div id="photoMoment">
+  <img src="foto1.jpg" alt="Nosotros">
+  <p>Desde el primer momento supe que eras especial 💖</p>
+</div>
+
+<!-- INVITACION FINAL -->
+<div id="cardFinal">
+  <h2>Mama Pame 💘</h2>
   <p><b>¿Quieres ser mi San Valentín?</b></p>
-
-  <div class="badge">🤫 Plan: sorpresa &nbsp;|&nbsp; ✨ Tú: protagonista</div>
-
-  <div style="height:14px"></div>
   <button class="yes" id="yesBtn">Sí obvio 💘</button>
   <button class="no" id="noBtn">No 🙈</button>
-
-  <p style="margin-top:12px;font-size:13px;opacity:.72;font-weight:600">
-    *El botón “No” tiene cosquillas.*
-  </p>
 </div>
 
 <!-- FINAL -->
 <div id="overlay">
   <div class="modal">
-    <div style="font-size:44px">🥰🍊</div>
     <h2>Sabía que dirías que sí 😌💖</h2>
-    <p>Entonces prepárate para el plan sorpresa ✨</p>
-    <div class="pd">PD: Se que tienes que ser mama pamelita preciosa ese dia, asi que la chiqui esta invitada</div>
-    <button style="background:#111;color:#fff; box-shadow:0 16px 38px rgba(0,0,0,.22);" id="closeBtn">Cerrar 💞</button>
+    <p>Prepárate para el plan sorpresa ✨</p>
+    <p><b>PD:</b> Se que tienes que ser mama pamelita preciosa ese dia, asi que la chiqui esta invitada 🥰</p>
   </div>
 </div>
 
 <audio id="music" src="cancion.mp3" loop></audio>
 
 <script>
-  const startBtn = document.getElementById("startBtn");
-  const intro = document.getElementById("intro");
-  const scene = document.getElementById("scene");
-  const plane = document.getElementById("plane");
-  const card = document.getElementById("card");
-  const yesBtn = document.getElementById("yesBtn");
-  const noBtn = document.getElementById("noBtn");
-  const overlay = document.getElementById("overlay");
-  const closeBtn = document.getElementById("closeBtn");
-  const music = document.getElementById("music");
+const startBtn=document.getElementById("startBtn");
+const intro=document.getElementById("intro");
+const scene=document.getElementById("scene");
+const plane=document.getElementById("plane");
+const photoMoment=document.getElementById("photoMoment");
+const cardFinal=document.getElementById("cardFinal");
+const yesBtn=document.getElementById("yesBtn");
+const noBtn=document.getElementById("noBtn");
+const overlay=document.getElementById("overlay");
+const music=document.getElementById("music");
 
-  const routePath = document.getElementById("routePath");
-  const glowPath  = document.getElementById("glowPath");
+startBtn.onclick=()=>{
+  music.play();
+  intro.style.display="none";
+  scene.style.display="block";
 
-  // ===== Flotantes (corazones + mandarinas) =====
-  const hearts = ["💖","💘","❤️","💕"];
-  function spawnFloat(){
-    const el = document.createElement("div");
-    el.className = "float";
-    el.textContent = (Math.random() < 0.58) ? hearts[(Math.random()*hearts.length)|0] : "🍊";
-    el.style.left = (Math.random()*100) + "vw";
-    el.style.bottom = (-10 - Math.random()*20) + "vh";
-    el.style.fontSize = (16 + Math.random()*18) + "px";
-    el.style.animationDuration = (4 + Math.random()*4) + "s";
-    document.body.appendChild(el);
-    setTimeout(()=>el.remove(), 9000);
-  }
-  setInterval(spawnFloat, 220);
+  setTimeout(()=>{
+    plane.style.transition="all 3s ease-in-out";
+    plane.style.left="85%";
+    plane.style.top="35%";
+  },100);
 
-  // ===== Util: centro de un elemento dentro de scene => coords SVG (1000x500) =====
-  function centerInScene(el){
-    const sceneRect = scene.getBoundingClientRect();
-    const r = el.getBoundingClientRect();
-    const cx = (r.left + r.width/2) - sceneRect.left;
-    const cy = (r.top + r.height/2) - sceneRect.top;
-    return {
-      x: (cx / sceneRect.width) * 1000,
-      y: (cy / sceneRect.height) * 500
-    };
-  }
+  setTimeout(()=>{
+    scene.style.display="none";
+    photoMoment.style.display="flex";
+  },3200);
 
-  // ===== Construye curva + prepara línea punteada + glow =====
-  function buildRoute(){
-    const a = centerInScene(document.getElementById("chile"));
-    const b = centerInScene(document.getElementById("ecuador"));
+  setTimeout(()=>{
+    photoMoment.style.display="none";
+    cardFinal.style.display="block";
+  },6500);
+};
 
-    const midX = (a.x + b.x) / 2;
-    const lift = 175;
+yesBtn.onclick=()=>{
+  overlay.style.display="flex";
+};
 
-    const c1 = { x: a.x + (midX - a.x)*0.35, y: a.y - lift };
-    const c2 = { x: b.x - (b.x - midX)*0.35, y: b.y - lift };
-
-    const d = `M ${a.x} ${a.y} C ${c1.x} ${c1.y}, ${c2.x} ${c2.y}, ${b.x} ${b.y}`;
-    routePath.setAttribute("d", d);
-    glowPath.setAttribute("d", d);
-
-    // línea punteada se “dibuja”
-    const len = routePath.getTotalLength();
-    routePath.style.strokeDasharray = "7 10";
-    routePath.style.strokeDashoffset = len;
-    routePath.dataset.len = String(len);
-
-    // glow listo
-    glowPath.style.strokeDashoffset = 0;
-  }
-
-  // ===== Vuelo (mueve ícono por la curva + dibuja línea) =====
-  function flyAlongPath(durationMs){
-    const len = Number(routePath.dataset.len || 0);
-    const start = performance.now();
-
-    // activa brillo corriendo
-    glowPath.classList.add("glowOn");
-
-    // dibuja línea punteada (dashoffset de len -> 0)
-    function drawLine(now){
-      const t = Math.min(1, (now - start) / durationMs);
-      routePath.style.strokeDashoffset = (1 - t) * len;
-      if(t < 1) requestAnimationFrame(drawLine);
-    }
-    requestAnimationFrame(drawLine);
-
-    // mueve el avión por el path
-    function move(now){
-      const t = Math.min(1, (now - start) / durationMs);
-      const p = routePath.getPointAtLength(t * len);
-
-      const sceneRect = scene.getBoundingClientRect();
-      const leftPx = (p.x/1000) * sceneRect.width;
-      const topPx  = (p.y/500)  * sceneRect.height;
-
-      plane.style.left = leftPx + "px";
-      plane.style.top  = topPx + "px";
-
-      // rotación hacia la dirección de avance
-      const p2 = routePath.getPointAtLength(Math.min(len, t*len + 10));
-      const ang = Math.atan2(p2.y - p.y, p2.x - p.x) * 180 / Math.PI;
-      plane.style.transform = `translate(-50%, -50%) rotate(${ang}deg)`;
-
-      if(t < 1) requestAnimationFrame(move);
-    }
-    requestAnimationFrame(move);
-
-    return new Promise(res => setTimeout(() => {
-      glowPath.classList.remove("glowOn"); // apaga cuando termina
-      res();
-    }, durationMs + 60));
-  }
-
-  // ===== Iniciar: música + escena + vuelo =====
-  startBtn.onclick = async () => {
-    try { await music.play(); } catch(e){}
-
-    intro.style.display = "none";
-    scene.style.display = "block";
-
-    buildRoute();
-    await flyAlongPath(3200);
-
-    scene.style.display = "none";
-    card.style.display = "block";
-  };
-
-  // ===== Sí =====
-  yesBtn.onclick = () => {
-    overlay.style.display = "flex";
-    for(let i=0;i<26;i++) setTimeout(spawnFloat, i*25);
-  };
-
-  // ===== No “escapista” =====
-  let noTries = 0;
-  function moveNo(){
-    const cardRect = card.getBoundingClientRect();
-    const btnRect = noBtn.getBoundingClientRect();
-    const pad = 14;
-
-    const maxX = cardRect.width - btnRect.width - pad*2;
-    const maxY = cardRect.height - btnRect.height - pad*2;
-
-    const x = pad + Math.random() * Math.max(20, maxX);
-    const y = pad + Math.random() * Math.max(20, maxY);
-
-    noBtn.style.position = "absolute";
-    noBtn.style.left = x + "px";
-    noBtn.style.top  = y + "px";
-
-    noTries++;
-    if(noTries === 6) noBtn.textContent = "¿Segura? 😅";
-    if(noTries === 10) noBtn.textContent = "Ya pues… 🙃";
-    if(noTries >= 14) noBtn.textContent = "Ok ok 😳";
-  }
-  noBtn.addEventListener("mouseenter", ()=> { if(noTries < 14) moveNo(); });
-  noBtn.addEventListener("touchstart", (e)=> { if(noTries < 14){ e.preventDefault(); moveNo(); } }, {passive:false});
-  noBtn.addEventListener("click", ()=> { noBtn.textContent = "😳"; });
-
-  // ===== Cerrar final =====
-  closeBtn.onclick = () => overlay.style.display = "none";
-
-  // si cambia tamaño mientras escena visible, recalcula ruta
-  window.addEventListener("resize", () => {
-    if(scene.style.display === "block"){
-      buildRoute();
-    }
-  });
+noBtn.onmouseover=()=>{
+  noBtn.style.position="absolute";
+  noBtn.style.left=Math.random()*200+"px";
+  noBtn.style.top=Math.random()*100+"px";
+};
 </script>
 
 </body>
 </html>
-
