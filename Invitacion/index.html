@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mama Pame 💘</title>
+
+<style>
+  :root{
+    --pink:#ff2f63;
+    --bg1:#ffd6e0;
+    --bg2:#ff9fb2;
+    --card: rgba(255,255,255,.92);
+    --text:#222;
+  }
+
+  body{
+    margin:0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    overflow:hidden;
+    height:100vh;
+    background:linear-gradient(135deg,var(--bg1),var(--bg2));
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:var(--text);
+  }
+
+  /* INTRO */
+  #intro{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.42);
+    backdrop-filter:blur(6px);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:20;
+    padding:18px;
+  }
+  .introCard{
+    width:min(520px, 100%);
+    background:var(--card);
+    padding:22px 20px;
+    border-radius:22px;
+    text-align:center;
+    box-shadow:0 22px 70px rgba(0,0,0,.25);
+    border:1px solid rgba(0,0,0,.06);
+  }
+  .introCard h2{ margin:0 0 8px; font-size:22px; }
+  .introCard p{ margin:0; opacity:.86; line-height:1.35; }
+  .introHint{
+    margin-top:10px;
+    font-size:13px;
+    opacity:.78;
+  }
+  button{
+    padding:12px 18px;
+    border:none;
+    border-radius:999px;
+    font-weight:900;
+    cursor:pointer;
+    margin-top:14px;
+    transition: transform .12s ease, opacity .12s ease;
+    user-select:none;
+  }
+  button:active{ transform: translateY(1px) scale(.99); }
+
+  #startBtn{
+    background:#111;
+    color:white;
+    opacity:.95;
+  }
+  #startBtn:hover{ opacity:1; transform: translateY(-1px); }
+
+  /* MAPA / ESCENA */
+  #scene{
+    width:min(820px, 92vw);
+    height:min(360px, 48vh);
+    position:relative;
+    display:none;
+    border-radius:22px;
+    background: rgba(255,255,255,.35);
+    border:1px solid rgba(255,255,255,.55);
+    box-shadow:0 18px 55px rgba(0,0,0,.14);
+    overflow:hidden;
+  }
+  .sceneTitle{
+    position:absolute;
+    top:12px; left:14px;
+    padding:8px 12px;
+    border-radius:999px;
+    background:rgba(255,255,255,.75);
+    border:1px solid rgba(0,0,0,.06);
+    font-weight:800;
+    font-size:13px;
+  }
+
+  .point{
+    position:absolute;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-weight:900;
+    font-size:14px;
+    padding:10px 12px;
+    border-radius:999px;
+    background:rgba(255,255,255,.82);
+    border:1px solid rgba(0,0,0,.06);
+    box-shadow:0 10px 22px rgba(0,0,0,.10);
+    transform: translate(-50%, -50%);
+    white-space:nowrap;
+  }
+  #chile{ left:16%; top:72%; }
+  #ecuador{ left:84%; top:38%; }
+
+  /* SVG path (línea punteada) */
+  #routeSvg{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+  }
+  #routePath{
+    fill:none;
+    stroke: rgba(0,0,0,.35);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 7 10; /* punteado */
+    filter: drop-shadow(0 10px 14px rgba(0,0,0,.08));
+    /* se anima con dashoffset via JS */
+  }
+
+  /* avioncito/mandarina */
+  #plane{
+    position:absolute;
+    font-size:34px;
+    transform: translate(-50%, -50%);
+    left:16%;
+    top:72%;
+    z-index:2;
+    filter: drop-shadow(0 14px 18px rgba(0,0,0,.18));
+    will-change: transform, left, top;
+  }
+
+  /* INVITACIÓN */
+  #card{
+    display:none;
+    width:min(520px, 92vw);
+    background:var(--card);
+    padding:24px 20px;
+    border-radius:22px;
+    text-align:center;
+    box-shadow:0 22px 70px rgba(0,0,0,.18);
+    border:1px solid rgba(0,0,0,.06);
+    position:relative;
+  }
+  #card h2{ margin:0 0 8px; font-size:24px; }
+  #card p{ margin:6px 0; opacity:.9; line-height:1.35; }
+
+  .yes{ background:var(--pink); color:white; box-shadow: 0 14px 28px rgba(255,47,99,.28); }
+  .no{ background:rgba(255,255,255,.9); border:1px solid rgba(0,0,0,.10); }
+
+  /* Flotantes (corazones + mandarinas) */
+  .float{
+    position:absolute;
+    pointer-events:none;
+    animation: floatUp linear forwards;
+    filter: drop-shadow(0 10px 14px rgba(0,0,0,.10));
+  }
+  @keyframes floatUp{
+    from{ transform: translateY(10vh) rotate(-10deg); opacity:0; }
+    10%{ opacity:.95; }
+    to{ transform: translateY(-130vh) rotate(12deg); opacity:0; }
+  }
+
+  /* FINAL */
+  #overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.5);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:30;
+    padding:18px;
+  }
+  .modal{
+    width:min(560px, 92vw);
+    background:white;
+    padding:22px 18px;
+    border-radius:22px;
+    text-align:center;
+    box-shadow:0 24px 80px rgba(0,0,0,.28);
+  }
+  .modal h2{ margin:0 0 8px; font-size:24px; }
+  .pd{
+    margin-top:12px;
+    padding:12px 14px;
+    border-radius:16px;
+    background:#fff6e8;
+    border:1px solid rgba(255,159,28,.30);
+    font-weight:800;
+    line-height:1.35;
+  }
+</style>
+</head>
+
+<body>
+
+<!-- INTRO -->
+<div id="intro">
+  <div class="introCard">
+    <h2>🍊 Atención Mama Pame 🍊</h2>
+    <p>Una invitación está por despegar desde <b>Chile</b> hasta <b>Ecuador</b>…</p>
+    <div class="introHint">Toca “Iniciar” para que suene la música (reglas del celular 😅)</div>
+    <button id="startBtn">Iniciar 💘</button>
+  </div>
+</div>
+
+<!-- ESCENA (Chile -> Ecuador) -->
+<div id="scene" aria-label="Vuelo Chile Ecuador">
+  <div class="sceneTitle">Ruta ultra secreta 🤫</div>
+
+  <svg id="routeSvg" viewBox="0 0 1000 500" preserveAspectRatio="none">
+    <!-- path se setea por JS para que conecte puntos reales -->
+    <path id="routePath" d="" />
+  </svg>
+
+  <div id="chile" class="point">🇨🇱 Chile</div>
+  <div id="ecuador" class="point">🇪🇨 Ecuador</div>
+
+  <div id="plane" title="Mandarina-Avión">🍊✈️</div>
+</div>
+
+<!-- INVITACIÓN -->
+<div id="card">
+  <h2>Mama Pame 💖</h2>
+  <p><b>¿Quieres ser mi San Valentín?</b></p>
+  <p><b>Plan:</b> sorpresa 🤫 (pero tú vas a brillar sí o sí)</p>
+  <button class="yes" id="yesBtn">Sí obvio 💘</button>
+  <button class="no" id="noBtn">No 🙈</button>
+  <p style="margin-top:10px;font-size:13px;opacity:.75">*El botón “No” tiene cosquillas.*</p>
+</div>
+
+<!-- FINAL -->
+<div id="overlay">
+  <div class="modal">
+    <div style="font-size:44px">🥰🍊</div>
+    <h2>Sabía que dirías que sí 😌💖</h2>
+    <p>Entonces prepárate para el plan sorpresa ✨</p>
+    <div class="pd">PD: Se que tienes que ser mama pamelita preciosa ese dia, asi que la chiqui esta invitada</div>
+    <button style="background:#111;color:#fff;" id="closeBtn">Cerrar 💞</button>
+  </div>
+</div>
+
+<audio id="music" src="cancion.mp3" loop></audio>
+
+<script>
+  const startBtn = document.getElementById("startBtn");
+  const intro = document.getElementById("intro");
+  const scene = document.getElementById("scene");
+  const plane = document.getElementById("plane");
+  const card = document.getElementById("card");
+  const yesBtn = document.getElementById("yesBtn");
+  const noBtn = document.getElementById("noBtn");
+  const overlay = document.getElementById("overlay");
+  const closeBtn = document.getElementById("closeBtn");
+  const music = document.getElementById("music");
+  const routePath = document.getElementById("routePath");
+
+  // ===== Flotantes (corazones + mandarinas) =====
+  const hearts = ["💖","💘","❤️","💕"];
+  function spawnFloat(){
+    const el = document.createElement("div");
+    el.className = "float";
+    el.textContent = (Math.random() < 0.58) ? hearts[(Math.random()*hearts.length)|0] : "🍊";
+    el.style.left = (Math.random()*100) + "vw";
+    el.style.bottom = (-10 - Math.random()*20) + "vh";
+    el.style.fontSize = (16 + Math.random()*18) + "px";
+    el.style.animationDuration = (4 + Math.random()*4) + "s";
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(), 9000);
+  }
+  setInterval(spawnFloat, 220);
+
+  // ===== Util: obtiene centro de un elemento dentro del contenedor scene, en coords SVG (1000x500) =====
+  function centerInScene(el){
+    const sceneRect = scene.getBoundingClientRect();
+    const r = el.getBoundingClientRect();
+    const cx = (r.left + r.width/2) - sceneRect.left;
+    const cy = (r.top + r.height/2) - sceneRect.top;
+    // convertir a viewBox 1000x500
+    const x = (cx / sceneRect.width) * 1000;
+    const y = (cy / sceneRect.height) * 500;
+    return {x,y};
+  }
+
+  // ===== Dibuja curva Chile -> Ecuador (Bezier) + anima el punteado =====
+  function buildRoute(){
+    const a = centerInScene(document.getElementById("chile"));
+    const b = centerInScene(document.getElementById("ecuador"));
+
+    // Control points para una curva linda (sube y hace arco)
+    const midX = (a.x + b.x) / 2;
+    const lift = 170; // qué tanto sube el arco (ajustable)
+    const c1 = { x: a.x + (midX - a.x)*0.35, y: a.y - lift };
+    const c2 = { x: b.x - (b.x - midX)*0.35, y: b.y - lift };
+
+    const d = `M ${a.x} ${a.y} C ${c1.x} ${c1.y}, ${c2.x} ${c2.y}, ${b.x} ${b.y}`;
+    routePath.setAttribute("d", d);
+
+    // prepara animación de dashoffset para que "se dibuje"
+    const len = routePath.getTotalLength();
+    routePath.style.strokeDasharray = "7 10";
+    routePath.style.strokeDashoffset = len; // escondido al inicio
+    routePath.dataset.len = String(len);
+
+    return { a, b, d, len };
+  }
+
+  // ===== Mueve el avión siguiendo la curva (muestreo del path) =====
+  function flyAlongPath(durationMs){
+    const len = Number(routePath.dataset.len || 0);
+    const start = performance.now();
+
+    // animar punteado: de len -> 0 (queda visible)
+    function drawLine(now){
+      const t = Math.min(1, (now - start) / durationMs);
+      routePath.style.strokeDashoffset = (1 - t) * len;
+      if(t < 1) requestAnimationFrame(drawLine);
+    }
+    requestAnimationFrame(drawLine);
+
+    // mover el ícono siguiendo el path
+    function move(now){
+      const t = Math.min(1, (now - start) / durationMs);
+      const p = routePath.getPointAtLength(t * len);
+
+      // colocar en porcentaje dentro del scene
+      const sceneRect = scene.getBoundingClientRect();
+      const leftPx = (p.x/1000) * sceneRect.width;
+      const topPx  = (p.y/500)  * sceneRect.height;
+
+      plane.style.left = leftPx + "px";
+      plane.style.top  = topPx + "px";
+
+      // rotación aproximada (dirección)
+      const p2 = routePath.getPointAtLength(Math.min(len, t*len + 8));
+      const ang = Math.atan2(p2.y - p.y, p2.x - p.x) * 180 / Math.PI;
+      plane.style.transform = `translate(-50%, -50%) rotate(${ang}deg)`;
+
+      if(t < 1) requestAnimationFrame(move);
+    }
+    requestAnimationFrame(move);
+
+    return new Promise(res => setTimeout(res, durationMs + 50));
+  }
+
+  // ===== Iniciar: música + escena + vuelo =====
+  startBtn.onclick = async () => {
+    // música (necesita interacción)
+    try { await music.play(); } catch(e){ /* si falla, igual seguimos */ }
+
+    intro.style.display = "none";
+    scene.style.display = "block";
+
+    // construir ruta (ya con el scene visible)
+    buildRoute();
+
+    // reiniciar posición del avión
+    plane.style.transform = "translate(-50%,-50%) rotate(0deg)";
+
+    // volar
+    await flyAlongPath(3200);
+
+    // mostrar invitación
+    scene.style.display = "none";
+    card.style.display = "block";
+  };
+
+  // ===== Sí =====
+  yesBtn.onclick = () => {
+    overlay.style.display = "flex";
+    // mini lluvia extra
+    for(let i=0;i<26;i++) setTimeout(spawnFloat, i*25);
+  };
+
+  // ===== No “escapista” =====
+  let noTries = 0;
+  function moveNo(){
+    const cardRect = card.getBoundingClientRect();
+    const btnRect = noBtn.getBoundingClientRect();
+    const pad = 12;
+
+    const maxX = cardRect.width - btnRect.width - pad*2;
+    const maxY = cardRect.height - btnRect.height - pad*2;
+
+    const x = pad + Math.random() * Math.max(20, maxX);
+    const y = pad + Math.random() * Math.max(20, maxY);
+
+    noBtn.style.position = "absolute";
+    noBtn.style.left = x + "px";
+    noBtn.style.top  = y + "px";
+
+    noTries++;
+    if(noTries === 6) noBtn.textContent = "¿Segura? 😅";
+    if(noTries === 10) noBtn.textContent = "Ya pues… 🙃";
+    if(noTries >= 14) noBtn.textContent = "Ok ok 😳";
+  }
+  noBtn.addEventListener("mouseenter", ()=> { if(noTries < 14) moveNo(); });
+  noBtn.addEventListener("touchstart", (e)=> { if(noTries < 14){ e.preventDefault(); moveNo(); } }, {passive:false});
+  noBtn.addEventListener("click", ()=> {
+    noBtn.textContent = "😳";
+  });
+
+  // ===== Cerrar final =====
+  closeBtn.onclick = () => overlay.style.display = "none";
+
+  // Si el usuario rota pantalla o cambia tamaño, reconstruye ruta si escena visible
+  window.addEventListener("resize", () => {
+    if(scene.style.display === "block"){
+      buildRoute();
+    }
+  });
+</script>
+
+</body>
+</html>
